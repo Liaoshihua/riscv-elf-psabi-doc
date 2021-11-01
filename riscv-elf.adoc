@@ -204,11 +204,12 @@ specific relocations show the instruction type in the Details column):
 
 .2+| 0       .2+| R_RISCV_NONE          .2+| None                            |                   .2+|
                                                                             <|
-.2+| 1       .2+| R_RISCV_32            .2+| Runtime relocation              | _word32_          .2+|
+.2+| 1       .2+| R_RISCV_32            .2+| 32-bit relocation               | _word32_          .2+|
                                                                             <| S + A
-.2+| 2       .2+| R_RISCV_64            .2+| Runtime relocation              | _word64_          .2+|
+.2+| 2       .2+| R_RISCV_64            .2+| 64-bit relocation               | _word64_          .2+|
                                                                             <| S + A
-.2+| 3       .2+| R_RISCV_RELATIVE      .2+| Runtime relocation              | _wordclass_       .2+|
+.2+| 3       .2+| R_RISCV_RELATIVE      .2+| Relocation against a local symbol in a shared object
+                                                                             | _wordclass_       .2+|
                                                                             <| B + A
 .2+| 4       .2+| R_RISCV_COPY          .2+| Runtime relocation              |                   .2+| Must be in executable; not allowed in shared library
                                                                             <|
@@ -226,39 +227,51 @@ specific relocations show the instruction type in the Details column):
                                                                             <| S + A + TLSOFFSET
 .2+| 11      .2+| R_RISCV_TLS_TPREL64   .2+| Runtime TLS relocation          | _word64_          .2+|
                                                                             <| S + A + TLSOFFSET
-.2+| 16      .2+| R_RISCV_BRANCH        .2+| PC-relative branch              | _B-Type_                .2+|
+.2+| 16      .2+| R_RISCV_BRANCH        .2+| 12-bit PC-relative branch offset
+                                                                             | _B-Type_                .2+|
                                                                             <| S + A - P
-.2+| 17      .2+| R_RISCV_JAL           .2+| PC-relative jump                | _J-Type_          .2+|
+.2+| 17      .2+| R_RISCV_JAL           .2+| 20-bit PC-relative jump offset  | _J-Type_          .2+|
                                                                             <| S + A - P
-.2+| 18      .2+| R_RISCV_CALL          .2+| PC-relative call                | _U+J-Type_             .2+| Macros `call`, `tail`
+.2+| 18      .2+| R_RISCV_CALL          .2+| 32-bit PC-relative function call | _U+J-Type_             .2+| Macros `call`, `tail`
                                                                             <| S + A - P
-.2+| 19      .2+| R_RISCV_CALL_PLT      .2+| PC-relative call (PLT)          | _U+J-Type_           .2+| Macros `call`, `tail` (PIC)
+.2+| 19      .2+| R_RISCV_CALL_PLT      .2+| 32-bit PC-relative function call | _U+J-Type_           .2+| Macros `call`, `tail` (PIC)
                                                                             <| S + A - P
-.2+| 20      .2+| R_RISCV_GOT_HI20      .2+| PC-relative GOT reference       | _U-Type_              .2+| `%got_pcrel_hi(symbol)`
+.2+| 20      .2+| R_RISCV_GOT_HI20      .2+| High 20 bits of 32-bit PC-relative GOT access
+                                                                             | _U-Type_              .2+| `%got_pcrel_hi(symbol)`
                                                                             <| G + A - P
-.2+| 21      .2+| R_RISCV_TLS_GOT_HI20  .2+| PC-relative TLS IE GOT offset   | _U-Type_               .2+| Macro `la.tls.ie`
+.2+| 21      .2+| R_RISCV_TLS_GOT_HI20  .2+| High 20 bits of 32-bit PC-relative TLS IE GOT access
+                                                                             | _U-Type_               .2+| Macro `la.tls.ie`
                                                                             <|
-.2+| 22      .2+| R_RISCV_TLS_GD_HI20   .2+| PC-relative TLS GD reference    | _U-Type_                     .2+| Macro `la.tls.gd`
+.2+| 22      .2+| R_RISCV_TLS_GD_HI20   .2+| High 20 bits of 32-bit PC-relative TLS GD GOT reference
+                                                                             | _U-Type_                     .2+| Macro `la.tls.gd`
                                                                             <|
-.2+| 23      .2+| R_RISCV_PCREL_HI20    .2+| PC-relative reference           | _U-Type_               .2+| `%pcrel_hi(symbol)`
+.2+| 23      .2+| R_RISCV_PCREL_HI20    .2+| High 20 bits of 32-bit PC-relative reference
+                                                                             | _U-Type_               .2+| `%pcrel_hi(symbol)`
                                                                             <| S + A - P
-.2+| 24      .2+| R_RISCV_PCREL_LO12_I  .2+| PC-relative reference           | _I-type_                       .2+| `%pcrel_lo(address of %pcrel_hi)`, the addend must be 0
+.2+| 24      .2+| R_RISCV_PCREL_LO12_I  .2+| Low 12 bits of a 32-bit PC-relative           | _I-type_                       .2+| `%pcrel_lo(address of %pcrel_hi)`, the addend must be 0
                                                                             <| S - P
-.2+| 25      .2+| R_RISCV_PCREL_LO12_S  .2+| PC-relative reference           | _S-Type_                      .2+| `%pcrel_lo(address of %pcrel_hi)`, the addend must be 0
+.2+| 25      .2+| R_RISCV_PCREL_LO12_S  .2+| Low 12 bits of a 32-bit PC-relative
+                                                                             | _S-Type_                      .2+| `%pcrel_lo(address of %pcrel_hi)`, the addend must be 0
                                                                             <| S - P
-.2+| 26      .2+| R_RISCV_HI20          .2+| Absolute address                | _U-Type_                       .2+| `%hi(symbol)`
+.2+| 26      .2+| R_RISCV_HI20          .2+| High 20 bits of 32-bit absolute address
+                                                                             | _U-Type_                       .2+| `%hi(symbol)`
                                                                             <| S + A
-.2+| 27      .2+| R_RISCV_LO12_I        .2+| Absolute address                | _I-Type_                     .2+| `%lo(symbol)`
+.2+| 27      .2+| R_RISCV_LO12_I        .2+| High 12 bits of 32-bit absolute address
+                                                                             | _I-Type_                     .2+| `%lo(symbol)`
                                                                             <| S + A
-.2+| 28      .2+| R_RISCV_LO12_S        .2+| Absolute address                | _S-Type_                      .2+| `%lo(symbol)`
+.2+| 28      .2+| R_RISCV_LO12_S        .2+| High 12 bits of 32-bit absolute address
+                                                                             | _S-Type_                      .2+| `%lo(symbol)`
                                                                             <| S + A
-.2+| 29      .2+| R_RISCV_TPREL_HI20    .2+| TLS LE thread offset            | _U-Type_                       .2+| `%tprel_hi(symbol)`
+.2+| 29      .2+| R_RISCV_TPREL_HI20    .2+| High 20 bits of TLS LE thread pointer offset
+                                                                             | _U-Type_                       .2+| `%tprel_hi(symbol)`
                                                                             <|
-.2+| 30      .2+| R_RISCV_TPREL_LO12_I  .2+| TLS LE thread offset            | _I-Type_                          .2+| `%tprel_lo(symbol)`
+.2+| 30      .2+| R_RISCV_TPREL_LO12_I  .2+| Low 12 bits of TLS LE thread pointer offset
+                                                                             | _I-Type_                          .2+| `%tprel_lo(symbol)`
                                                                             <|
-.2+| 31      .2+| R_RISCV_TPREL_LO12_S  .2+| TLS LE thread offset            | _S-Type_                        .2+| `%tprel_lo(symbol)`
+.2+| 31      .2+| R_RISCV_TPREL_LO12_S  .2+| Low 12 bits of TLS LE thread pointer offset
+                                                                             | _S-Type_                        .2+| `%tprel_lo(symbol)`
                                                                             <|
-.2+| 32      .2+| R_RISCV_TPREL_ADD     .2+| TLS LE thread usage             |                                 .2+| `%tprel_add(symbol)`
+.2+| 32      .2+| R_RISCV_TPREL_ADD     .2+| TLS LE thread pointer usage.    |                                 .2+| `%tprel_add(symbol)`
                                                                             <|
 .2+| 33      .2+| R_RISCV_ADD8          .2+| 8-bit label addition            | _word8_                  .2+|
                                                                              <| V + S + A
@@ -282,11 +295,12 @@ specific relocations show the instruction type in the Details column):
                                                                             <|
 .2+| 43      .2+| R_RISCV_ALIGN         .2+| Alignment statement             |                                      .2+|
                                                                             <|
-.2+| 44      .2+| R_RISCV_RVC_BRANCH    .2+| PC-relative branch offset       | _CB-Type_                  .2+|
+.2+| 44      .2+| R_RISCV_RVC_BRANCH    .2+| 8-bit PC-relative branch offset | _CB-Type_                  .2+|
                                                                             <| S + A - P
-.2+| 45      .2+| R_RISCV_RVC_JUMP      .2+| PC-relative jump offset         | _CJ-Type_                  .2+|
+.2+| 45      .2+| R_RISCV_RVC_JUMP      .2+| 11-bit PC-relative jump offset  | _CJ-Type_                  .2+|
                                                                             <| S + A - P
-.2+| 46      .2+| R_RISCV_RVC_LUI       .2+| Absolute address                | _CI-Type_                      .2+|
+.2+| 46      .2+| R_RISCV_RVC_LUI       .2+| High 6 bits of 18-bit absolute address
+                                                                             | _CI-Type_                      .2+|
                                                                             <| S + A
 .2+| 47-50   .2+| *Reserved*            .2+| Reserved for future standard use |                                 .2+|
                                                                             <|
@@ -302,9 +316,10 @@ specific relocations show the instruction type in the Details column):
                                                                             <| S + A
 .2+| 56      .2+| R_RISCV_SET32         .2+| Local label assignment          | _word32_                       .2+|
                                                                             <| S + A
-.2+| 57      .2+| R_RISCV_32_PCREL      .2+| PC-relative reference           | _word32_                  .2+|
+.2+| 57      .2+| R_RISCV_32_PCREL      .2+| 32-bit PC relative              | _word32_                  .2+|
                                                                             <| S + A - P
-.2+| 58      .2+| R_RISCV_IRELATIVE     .2+| Runtime relocation              | _wordclass_  .2+|
+.2+| 58      .2+| R_RISCV_IRELATIVE     .2+| Relocation against a local ifunc symbol in a shared object
+                                                                             | _wordclass_  .2+|
                                                                             <| `ifunc_resolver(B + A)`
 .2+| 59-191  .2+| *Reserved*            .2+| Reserved for future standard use |                               .2+|
                                                                             <|
