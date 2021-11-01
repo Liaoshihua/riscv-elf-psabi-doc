@@ -15,6 +15,7 @@ describes RISC-V-specific definitions.
 The table below lists the mapping from DWARF register numbers to machine
 registers.
 
+.Mapping table between DWARF register numbers and machine register
 [cols="2,2,4"]
 [width=80%]
 |===
