@@ -195,7 +195,13 @@ machine word sized relocations that are used for symbol addresses in the
 Global Offset Table or DWARF meta data.
 
 The following table provides details of the RISC-V ELF relocations (instruction
-specific relocations show the instruction type in the Details column):
+specific relocations show the instruction type in the Details column).
+
+Type field indicate this relocation is static or runtime relocation type:
+
+- Static relocations are must resolved by static linker.
+
+- Runtime relocations are resolved by static linker or dynamic linker.
 
 [cols=">2,7,3,6,11"]
 [width=100%]
