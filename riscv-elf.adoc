@@ -194,19 +194,33 @@ sequences with their associated relocations in addition to the general purpose
 machine word sized relocations that are used for symbol addresses in the
 Global Offset Table or DWARF meta data.
 
-The following table provides details of the RISC-V ELF relocations (instruction
-specific relocations show the instruction type in the Details column).
+<<reloc-table>> provides details of the RISC-V ELF relocations, means of each
+columns are list below:
 
-Type field indicate this relocation is static or runtime relocation type:
+Enum:: The enum value of the relocation, used in the r_info field of
+the ELF32_R_TYPE/ELF64_R_TYPE.
 
+ELF Reloc Type:: The mnemonic name for the relocation.
+
+Type:: Indicate this relocation is static or runtime relocation type:
++
 - Static relocations are must resolved by static linker.
-
 - Runtime relocations are resolved by static linker or dynamic linker.
++
 
+Field::  Describe this relocation is apply to which field of data or
+         instruction, more detail see <<Field Symbols>>.
+
+Caculation::  Formula for how to resolve the relocation value, definition of
+              symbol can be found <<Calculation Symbols>>
+
+Description::  Description of this relocation.
+
+[[reloc-table]]
 [cols=">2,7,3,6,11"]
 [width=100%]
 |===
-| Enum          | ELF Reloc Type                         | Type    | Field / Calculation  | Details
+| Enum          | ELF Reloc Type                         | Type    | Field / Calculation  | Description
 
 .2+| 0       .2+| [.relocname]#R_RISCV_NONE#          .2+| None    |                   .2+|
                                                                   <|
