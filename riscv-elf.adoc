@@ -170,7 +170,7 @@ The defined processor-specific `st_other` flags are listed in <<rv-st-other>>.
 +
 
 [[rv-st-other]]
-.RISC-V specific value for `st_other` flags.
+.RISC-V-specific `st_other` flags
 [cols="3,1"]
 [width=60%]
 |===
@@ -277,7 +277,7 @@ https://github.com/riscv/riscv-asm-manual[RISC-V Assembly Programmer's Manual].
 calculation:
 
 [[var-reloc-calc]]
-.Variable used in relocation calculation
+.Variables used in relocation calculation
 [%autowidth]
 |===
 | Variable  | Description
@@ -301,7 +301,7 @@ of the `__global_pointer$` symbol into register `gp` (aka `x3`).
 <<var-reloc-field>> provides details on the variables used in relocation fields:
 
 [[var-reloc-field]]
-.Variable used in relocation fields
+.Variables used in relocation fields
 [%autowidth]
 |===
 | Variable    | Description
@@ -538,7 +538,7 @@ dynamically allocated thread local storage. <<tls-model>> lists the
 thread local storage models:
 
 [[tls-model]]
-.TLS model
+.TLS models
 [cols="1,2,3"]
 [width=70%]
 |===
@@ -683,7 +683,7 @@ typedef struct
 The defined processor-specific section types are listed in <<rv-section-type>>.
 
 [[rv-section-type]]
-.RISC-V specific section types
+.RISC-V-specific section types
 [cols="3,3,1"]
 [width=80%]
 |===
@@ -697,7 +697,7 @@ The defined processor-specific section types are listed in <<rv-section-type>>.
 <<rv-section>> lists the special sections defined by this ABI.
 
 [[rv-section]]
-.RISC-V specific sections
+.RISC-V-specific sections
 [cols="3,3,1"]
 [width=80%]
 |===
@@ -713,7 +713,7 @@ The defined processor-specific section types are listed in <<rv-section-type>>.
 The defined processor-specific segment types are listed in <<rv-seg-type>>.
 
 [[rv-seg-type]]
-.RISC-V specific segment types
+.RISC-V-specific segment types
 [cols="3,2,3"]
 [width=80%]
 |===
@@ -733,7 +733,7 @@ There are no RISC-V specific definitions relating to ELF note sections.
 The defined processor-specific dynamic array tags are listed in <<rv-dyn-tag>>.
 
 [[rv-dyn-tag]]
-.RISC-V specific dynamic array tags
+.RISC-V-specific dynamic array tags
 [cols="4,2,1,3,3"]
 [width=90%]
 |===
