@@ -194,27 +194,24 @@ sequences with their associated relocations in addition to the general purpose
 machine word sized relocations that are used for symbol addresses in the
 Global Offset Table or DWARF meta data.
 
-<<reloc-table>> provides details of the RISC-V ELF relocations, means of each
-columns are list below:
+<<reloc-table>> provides details of the RISC-V ELF relocations; the meaning of each
+column is given below:
 
-Enum:: The enum value of the relocation, used in the r_info field of
-the ELF32_R_TYPE/ELF64_R_TYPE.
+Enum:: The number of the relocation, encoded in the r_info field
 
-ELF Reloc Type:: The mnemonic name for the relocation.
+ELF Reloc Type:: The name of the relocation
 
-Type:: Indicate this relocation is static or runtime relocation type:
+Type:: Whether the relocation is a static or runtime relocation:
 +
-- Static relocations are must resolved by static linker.
-- Runtime relocations are resolved by static linker or dynamic linker.
-+
+- Static relocations are always resolved by the static linker
+- Runtime relocations can be resolved by both static and dynamic linkers
 
-Field::  Describe this relocation is apply to which field of data or
-         instruction, more detail see <<Field Symbols>>.
+Field:: Describes the set of bits affected by this relocation; see <<Field Symbols>> for the definitions of the individual types
 
-Caculation::  Formula for how to resolve the relocation value, definition of
-              symbol can be found <<Calculation Symbols>>
+Caculation:: Formula for how to resolve the relocation value; definitions of the
+             symbols can be found in <<Calculation Symbols>>
 
-Description::  Description of this relocation.
+Description:: Additional information about the relocation
 
 [[reloc-table]]
 [cols=">2,7,3,6,11"]
@@ -232,7 +229,7 @@ Description::  Description of this relocation.
                                                                   <| B + A
 .2+| 4       .2+| [.relocname]#R_RISCV_COPY#          .2+| Runtime |                   .2+| Must be in executable; not allowed in shared library
                                                                   <|
-.2+| 5       .2+| [.relocname]#R_RISCV_JUMP_SLOT#     .2+| Runtime | _wordclass_       .2+| Handled by PLT unless `LD_BIND_NOW`
+.2+| 5       .2+| [.relocname]#R_RISCV_JUMP_SLOT#     .2+| Runtime | _wordclass_       .2+| Indicates the symbol associated with a PLT entry
                                                                   <| S
 .2+| 6       .2+| [.relocname]#R_RISCV_TLS_DTPMOD32#  .2+| Runtime | _word32_          .2+|
                                                                   <| TLSMODULE
@@ -280,7 +277,7 @@ Description::  Description of this relocation.
                                                                   <|
 .2+| 32      .2+| [.relocname]#R_RISCV_TPREL_ADD#     .2+| Static  |                   .2+| TLS LE thread pointer usage, `%tprel_add(symbol)`
                                                                   <|
-.2+| 33      .2+| [.relocname]#R_RISCV_ADD8#          .2+| Static  | _word8_           .2+| 8-bit label addition .
+.2+| 33      .2+| [.relocname]#R_RISCV_ADD8#          .2+| Static  | _word8_           .2+| 8-bit label addition
                                                                   <| V + S + A
 .2+| 34      .2+| [.relocname]#R_RISCV_ADD16#         .2+| Static  | _word16_          .2+| 16-bit label addition
                                                                   <| V + S + A
