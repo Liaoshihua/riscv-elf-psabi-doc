@@ -322,6 +322,4 @@ role:
       changebar: 1
       color: $base_font_color
       offset: 2
-  relocname:
-    font-size:  8
 
